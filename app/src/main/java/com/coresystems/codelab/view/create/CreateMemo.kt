@@ -9,6 +9,7 @@ import com.coresystems.codelab.R
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.LatLng
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.content_create_memo.*
 
@@ -19,7 +20,7 @@ import kotlinx.android.synthetic.main.content_create_memo.*
 /**
  * Activity that allows a user to create a new Memo.
  */
-class CreateMemo : AppCompatActivity(), OnMapReadyCallback {
+class CreateMemo : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClickListener {
 
     private lateinit var model: CreateMemoViewModel
     private lateinit var mapView: MapView
@@ -65,6 +66,10 @@ class CreateMemo : AppCompatActivity(), OnMapReadyCallback {
     }
     override fun onMapReady(p0: GoogleMap?) {
         println("Map ready")
+        p0!!.setOnMapClickListener(this)
+    }
+    override fun onMapClick(p0: LatLng?) {
+        println("Map tapped!")
     }
 
     override fun onResume() {
