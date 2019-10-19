@@ -10,6 +10,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.content_create_memo.*
 
@@ -24,6 +25,7 @@ class CreateMemo : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClick
 
     private lateinit var model: CreateMemoViewModel
     private lateinit var mapView: MapView
+    private lateinit var mMap: GoogleMap
     private val MAPVIEW_BUNDLE_KEY = "AIzaSyCJkgMsqJxFkFxIjqqhQksccMBUAZnlQi8"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,12 +66,19 @@ class CreateMemo : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClick
             else -> super.onOptionsItemSelected(item)
         }
     }
-    override fun onMapReady(p0: GoogleMap?) {
+    override fun onMapReady(map: GoogleMap?) {
         println("Map ready")
-        p0!!.setOnMapClickListener(this)
+        if (map != null) {
+            mMap = map
+            mMap!!.setOnMapClickListener(this)
+        }
+
     }
-    override fun onMapClick(p0: LatLng?) {
-        println("Map tapped!")
+    override fun onMapClick(point: LatLng?) {
+        println("Map tapped!"+point!!.latitude+" & "+point.longitude)
+        var markerOptions = MarkerOptions().position(point)
+        markerOptions.title("Selected point")
+        mMap.addMarker(markerOptions)
     }
 
     override fun onResume() {
