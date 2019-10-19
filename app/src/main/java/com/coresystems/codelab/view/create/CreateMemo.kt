@@ -26,6 +26,8 @@ class CreateMemo : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClick
     private lateinit var model: CreateMemoViewModel
     private lateinit var mapView: MapView
     private lateinit var mMap: GoogleMap
+    private var reminderLatitude: Long = 0
+    private var reminderLongitude: Long = 0
     private val MAPVIEW_BUNDLE_KEY = "AIzaSyCJkgMsqJxFkFxIjqqhQksccMBUAZnlQi8"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,13 +55,15 @@ class CreateMemo : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClick
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_save -> {
-                model.updateMemo(memo_title.text.toString(), memo_description.text.toString())
+                model.updateMemo(memo_title.text.toString(), memo_description.text.toString(), reminderLatitude, reminderLongitude)
                 if (model.isMemoValid()) {
                     model.saveMemo()
                     finish()
                 } else {
                     memo_title_container.error = model.getTitleError(this)
                     memo_description_container.error = model.getTextError(this)
+                    memo_location_container.error = model.getLocationError(this)
+                    println("Location error :"+ (reminderLatitude == 0L))
                 }
                 true
             }
@@ -75,10 +79,14 @@ class CreateMemo : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClick
 
     }
     override fun onMapClick(point: LatLng?) {
+        mMap.clear()
         println("Map tapped!"+point!!.latitude+" & "+point.longitude)
+        reminderLatitude = point.latitude.toLong()
+        reminderLongitude = point.longitude.toLong()
         var markerOptions = MarkerOptions().position(point)
         markerOptions.title("Selected point")
         mMap.addMarker(markerOptions)
+        memo_location.setText("Location added")
     }
 
     override fun onResume() {
