@@ -21,10 +21,10 @@ const val BUNDLE_MEMO_ID: String = "memoId"
  */
 class ViewMemo : AppCompatActivity(), OnMapReadyCallback {
 
-    private var reminderLongitude: Long = 0
-    private var reminderLatitude: Long = 0
+    private var reminderLongitude: Double = 0.0
+    private var reminderLatitude: Double = 0.0
     private lateinit var mapView: MapView
-    private lateinit var mMap: GoogleMap
+    private var mMap: GoogleMap? = null
     private val MAPVIEW_BUNDLE_KEY = "AIzaSyCJkgMsqJxFkFxIjqqhQksccMBUAZnlQi8"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,10 +32,12 @@ class ViewMemo : AppCompatActivity(), OnMapReadyCallback {
         setSupportActionBar(toolbar)
         //Initialize views with the passed memo id
         val model = ViewModelProviders.of(this).get(ViewMemoViewModel::class.java)
-        var mapViewBundle: Bundle?
+        var mapViewBundle = savedInstanceState?.getBundle(MAPVIEW_BUNDLE_KEY)
+        mapView = findViewById(R.id.memo_mapview)
+        mapView.onCreate(mapViewBundle)
+        mapView.getMapAsync(this@ViewMemo)
         if (savedInstanceState == null) {
             launch(Android) {
-                mapViewBundle = savedInstanceState!!.getBundle(MAPVIEW_BUNDLE_KEY)
                 val id = intent.getLongExtra(BUNDLE_MEMO_ID, -1)
                 val pendingMemo = model.getMemo(id)
                 val memo = pendingMemo.await()
@@ -46,16 +48,49 @@ class ViewMemo : AppCompatActivity(), OnMapReadyCallback {
                 reminderLatitude = memo.reminderLatitude
                 memo_title.isEnabled = false
                 memo_description.isEnabled = false
-
-                mapView.onCreate(mapViewBundle)
-                mapView.getMapAsync(this@ViewMemo)
+                createMarker()
             }
         }
     }
     override fun onMapReady(map: GoogleMap?) {
-        var markerOption = MarkerOptions()
-        markerOption.position(LatLng(reminderLatitude.toDouble(), reminderLongitude.toDouble()))
+        mMap = map
+        println("map ready")
+    }
+
+    private fun createMarker(){
+        val markerOption = MarkerOptions()
+        markerOption.position(LatLng(reminderLatitude, reminderLongitude))
         markerOption.title("Selected location.")
-        map!!.addMarker(markerOption)
+        mMap!!.addMarker(markerOption)
+        println("Marker added")
+    }
+    override fun onResume() {
+        super.onResume()
+        mapView.onResume()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        mapView.onStart()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mapView.onStop()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mapView.onPause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mapView.onDestroy()
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        mapView.onLowMemory()
     }
 }

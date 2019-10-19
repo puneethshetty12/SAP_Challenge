@@ -21,9 +21,9 @@ data class Memo(
         @ColumnInfo(name = "reminderDate")
         var reminderDate: Long = 0,
         @ColumnInfo(name = "reminderLatitude")
-        var reminderLatitude: Long = 0,
+        var reminderLatitude: Double = 0.0,
         @ColumnInfo(name = "reminderLongitude")
-        var reminderLongitude: Long = 0,
+        var reminderLongitude: Double = 0.0,
         @ColumnInfo(name = "isDone")
         var isDone: Boolean = false
 )

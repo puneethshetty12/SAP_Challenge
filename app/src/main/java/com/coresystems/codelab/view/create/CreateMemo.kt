@@ -26,8 +26,8 @@ class CreateMemo : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClick
     private lateinit var model: CreateMemoViewModel
     private lateinit var mapView: MapView
     private lateinit var mMap: GoogleMap
-    private var reminderLatitude: Long = 0
-    private var reminderLongitude: Long = 0
+    private var reminderLatitude: Double = 0.0
+    private var reminderLongitude: Double = 0.0
     private val MAPVIEW_BUNDLE_KEY = "AIzaSyCJkgMsqJxFkFxIjqqhQksccMBUAZnlQi8"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,7 +63,7 @@ class CreateMemo : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClick
                     memo_title_container.error = model.getTitleError(this)
                     memo_description_container.error = model.getTextError(this)
                     memo_location_container.error = model.getLocationError(this)
-                    println("Location error :"+ (reminderLatitude == 0L))
+                    println("Location error :"+ (reminderLatitude == 0.0))
                 }
                 true
             }
@@ -81,8 +81,8 @@ class CreateMemo : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClick
     override fun onMapClick(point: LatLng?) {
         mMap.clear()
         println("Map tapped!"+point!!.latitude+" & "+point.longitude)
-        reminderLatitude = point.latitude.toLong()
-        reminderLongitude = point.longitude.toLong()
+        reminderLatitude = point.latitude
+        reminderLongitude = point.longitude
         var markerOptions = MarkerOptions().position(point)
         markerOptions.title("Selected point")
         mMap.addMarker(markerOptions)
@@ -112,5 +112,10 @@ class CreateMemo : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClick
     override fun onDestroy() {
         super.onDestroy()
         mapView.onDestroy()
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        mapView.onLowMemory()
     }
 }

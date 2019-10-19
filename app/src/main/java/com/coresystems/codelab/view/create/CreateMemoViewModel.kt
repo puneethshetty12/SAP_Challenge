@@ -29,14 +29,14 @@ class CreateMemoViewModel : ViewModel() {
     /**
      * Call this method to update the memo. This is usually needed when the user changed his input.
      */
-    fun updateMemo(title: String, description: String, reminderLatitude: Long, reminderLongitude: Long) {
+    fun updateMemo(title: String, description: String, reminderLatitude: Double, reminderLongitude: Double) {
         memo = Memo(title = title, description = description, reminderLatitude = reminderLatitude, reminderLongitude = reminderLongitude)
     }
 
     /**
      * @return true if the title and content are not blank; false otherwise.
      */
-    fun isMemoValid(): Boolean = memo.title.isNotBlank() && memo.description.isNotBlank() && (memo.reminderLatitude != 0L && memo.reminderLongitude != 0L)
+    fun isMemoValid(): Boolean = memo.title.isNotBlank() && memo.description.isNotBlank() && (memo.reminderLatitude != 0.0 && memo.reminderLongitude != 0.0)
 
     /**
      * @return an error message if the memo text is blank; an empty string otherwise.
@@ -54,5 +54,5 @@ class CreateMemoViewModel : ViewModel() {
      * @return an error message if the memo title is blank; an empty string otherwise.
      */
     @NonNull
-    fun getLocationError(@NonNull context: Context): String = if (memo.reminderLongitude == 0L && memo.reminderLatitude == 0L) context.getString(R.string.memo_location_empty_error) else EMPTY_STRING
+    fun getLocationError(@NonNull context: Context): String = if (memo.reminderLongitude == 0.0 && memo.reminderLatitude == 0.0) context.getString(R.string.memo_location_empty_error) else EMPTY_STRING
 }
