@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.NonNull
+import android.support.v4.app.NotificationManagerCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -13,6 +14,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.CompoundButton
 import com.coresystems.codelab.R
+import com.coresystems.codelab.alert.NotificationHelper
 import com.coresystems.codelab.model.Android
 import com.coresystems.codelab.model.Memo
 import com.coresystems.codelab.view.create.CreateMemo
@@ -36,7 +38,7 @@ class Home : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         setSupportActionBar(toolbar)
-
+        NotificationHelper.createNotificationChannel(this, NotificationManagerCompat.IMPORTANCE_DEFAULT, false, resources.getString(R.string.app_name), "App notification channel.")
         //Setup observation of the memo list (that we'll update the adapter with once it changes)
         model = ViewModelProviders.of(this).get(HomeViewModel::class.java)
         observeViewModel(model, false)
