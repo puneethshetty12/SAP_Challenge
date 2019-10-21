@@ -56,7 +56,7 @@ class CreateMemo : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClick
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_save -> {
-                println("ID :"+createMemoId())
+                println("Memo ID :"+createMemoId())
                 model.updateMemo(memo_title.text.toString(), memo_description.text.toString(), reminderLatitude, reminderLongitude)
                 if (model.isMemoValid()) {
                     model.saveMemo()
