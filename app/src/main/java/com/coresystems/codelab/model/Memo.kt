@@ -14,6 +14,8 @@ data class Memo(
         @ColumnInfo(name = "id")
         @PrimaryKey(autoGenerate = true)
         var id: Long = 0,
+        @ColumnInfo(name = "intentId")
+        var intentId: Int = 0,
         @ColumnInfo(name = "title")
         var title: String = EMPTY_STRING,
         @ColumnInfo(name = "description")

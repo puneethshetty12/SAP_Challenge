@@ -29,8 +29,8 @@ class CreateMemoViewModel : ViewModel() {
     /**
      * Call this method to update the memo. This is usually needed when the user changed his input.
      */
-    fun updateMemo(title: String, description: String, reminderLatitude: Double, reminderLongitude: Double) {
-        memo = Memo(title = title, description = description, reminderLatitude = reminderLatitude, reminderLongitude = reminderLongitude)
+    fun updateMemo(intendId: Int, title: String, description: String, reminderLatitude: Double, reminderLongitude: Double) {
+        memo = Memo(intentId = intendId, title = title, description = description, reminderLatitude = reminderLatitude, reminderLongitude = reminderLongitude)
     }
 
     /**

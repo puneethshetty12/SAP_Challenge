@@ -1,11 +1,16 @@
 package com.coresystems.codelab.view.home
 
+import android.Manifest
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.support.annotation.NonNull
+import android.support.v4.app.ActivityCompat
 import android.support.v4.app.NotificationManagerCompat
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -33,11 +38,24 @@ class Home : AppCompatActivity() {
     private lateinit var model: HomeViewModel
     private lateinit var menuItemShowAll: MenuItem
     private lateinit var menuItemShowOpen: MenuItem
+    private var LOCATION_PERMISSION_REQUEST_CODE = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         setSupportActionBar(toolbar)
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            println("Version :"+Build.VERSION.SDK_INT)
+            if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)!=PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
+            } else {
+                //do action
+                println("Granted")
+            }
+        } else {
+            //do action
+            println("Granted")
+        }
         NotificationHelper.createNotificationChannel(this, NotificationManagerCompat.IMPORTANCE_DEFAULT, false, resources.getString(R.string.app_name), "App notification channel.")
         //Setup observation of the memo list (that we'll update the adapter with once it changes)
         model = ViewModelProviders.of(this).get(HomeViewModel::class.java)

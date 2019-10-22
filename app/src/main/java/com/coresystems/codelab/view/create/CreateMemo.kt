@@ -2,7 +2,9 @@ package com.coresystems.codelab.view.create
 
 import android.app.PendingIntent
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.content.Intent
+import android.location.LocationManager
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
@@ -57,10 +59,11 @@ class CreateMemo : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClick
         return when (item.itemId) {
             R.id.action_save -> {
                 println("Memo ID :"+createMemoId())
-                model.updateMemo(memo_title.text.toString(), memo_description.text.toString(), reminderLatitude, reminderLongitude)
+                var intentId = createMemoId()
+                model.updateMemo(intentId, memo_title.text.toString(), memo_description.text.toString(), reminderLatitude, reminderLongitude)
                 if (model.isMemoValid()) {
                     model.saveMemo()
-                    //createProximityAlert()
+                    createProximityAlert(intentId)
                     finish()
                 } else {
                     memo_title_container.error = model.getTitleError(this)
@@ -104,9 +107,11 @@ class CreateMemo : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClick
     /**
      * Creates a pendingIntent and adds it to proximityAlert
      */
-    private fun createProximityAlert(){
+    private fun createProximityAlert(intentId: Int){
         val intent = Intent(applicationContext, NotificationReceiver::class.java)
-        var pendingIntent = PendingIntent.getBroadcast(applicationContext,0,intent, 0)
+        var pendingIntent = PendingIntent.getBroadcast(applicationContext,intentId,intent, PendingIntent.FLAG_CANCEL_CURRENT)
+        var locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        //locationManager.addProximityAlert(reminderLatitude, reminderLongitude, 20, -1,pendingIntent)
     }
     override fun onResume() {
         super.onResume()
