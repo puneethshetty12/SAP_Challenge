@@ -1,14 +1,19 @@
 package com.coresystems.codelab.view.create
 
+import android.Manifest
 import android.app.PendingIntent
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.location.LocationManager
+import android.os.Build
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import com.coresystems.codelab.R
 import com.coresystems.codelab.alert.NotificationReceiver
 import com.google.android.gms.maps.GoogleMap
@@ -31,6 +36,7 @@ class CreateMemo : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClick
     private lateinit var mMap: GoogleMap
     private var reminderLatitude: Double = 0.0
     private var reminderLongitude: Double = 0.0
+    private var RADIUS: Float = 200f // meters
     private val MAPVIEW_BUNDLE_KEY = "AIzaSyCJkgMsqJxFkFxIjqqhQksccMBUAZnlQi8"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,9 +68,13 @@ class CreateMemo : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClick
                 var intentId = createMemoId()
                 model.updateMemo(intentId, memo_title.text.toString(), memo_description.text.toString(), reminderLatitude, reminderLongitude)
                 if (model.isMemoValid()) {
-                    model.saveMemo()
-                    createProximityAlert(intentId)
-                    finish()
+                    if(checkLocationPermission()){
+                        model.saveMemo()
+                        createProximityAlert(intentId)
+                        finish()
+                    } else {
+                        Toast.makeText(this, "Location permission is required.", Toast.LENGTH_SHORT).show()
+                    }
                 } else {
                     memo_title_container.error = model.getTitleError(this)
                     memo_description_container.error = model.getTextError(this)
@@ -108,10 +118,23 @@ class CreateMemo : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClick
      * Creates a pendingIntent and adds it to proximityAlert
      */
     private fun createProximityAlert(intentId: Int){
-        val intent = Intent(applicationContext, NotificationReceiver::class.java)
-        var pendingIntent = PendingIntent.getBroadcast(applicationContext,intentId,intent, PendingIntent.FLAG_CANCEL_CURRENT)
-        var locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        //locationManager.addProximityAlert(reminderLatitude, reminderLongitude, 20, -1,pendingIntent)
+        if(checkLocationPermission()){
+            val intent = Intent(applicationContext, NotificationReceiver::class.java)
+            var pendingIntent = PendingIntent.getBroadcast(applicationContext,intentId,intent, PendingIntent.FLAG_CANCEL_CURRENT)
+            var locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            locationManager.addProximityAlert(reminderLatitude, reminderLongitude, RADIUS, -1,pendingIntent)
+        }
+    }
+    private fun checkLocationPermission(): Boolean{
+        var result = false
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED){
+                result = true
+            }
+        } else {
+            result = true
+        }
+        return result
     }
     override fun onResume() {
         super.onResume()
