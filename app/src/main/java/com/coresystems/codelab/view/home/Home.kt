@@ -29,7 +29,6 @@ import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.content_home.*
 import kotlinx.coroutines.experimental.launch
 
-
 /**
  * The main activity of the app. Shows a list of recorded memos and lets the user add new memos.
  */
@@ -38,8 +37,12 @@ class Home : AppCompatActivity() {
     private lateinit var model: HomeViewModel
     private lateinit var menuItemShowAll: MenuItem
     private lateinit var menuItemShowOpen: MenuItem
-    private var LOCATION_PERMISSION_REQUEST_CODE = 1
 
+    companion object {
+        const val NOTIFICATION_CHANNEL_NAME = "Memo notifications"
+        const val NOTIFICATION_CHANNEL_DESC = "Notification channel for memos."
+        const val LOCATION_PERMISSION_REQUEST_CODE = 1
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -56,7 +59,7 @@ class Home : AppCompatActivity() {
             //do action
             println("Granted")
         }
-        NotificationHelper.createNotificationChannel(this, NotificationManagerCompat.IMPORTANCE_DEFAULT, false, resources.getString(R.string.app_name), "App notification channel.")
+        NotificationHelper.createNotificationChannel(this, NotificationManagerCompat.IMPORTANCE_DEFAULT, false, NOTIFICATION_CHANNEL_NAME, NOTIFICATION_CHANNEL_DESC)
         //Setup observation of the memo list (that we'll update the adapter with once it changes)
         model = ViewModelProviders.of(this).get(HomeViewModel::class.java)
         observeViewModel(model, false)

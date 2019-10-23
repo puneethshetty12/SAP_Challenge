@@ -32,6 +32,8 @@
         <activity
             android:name=".view.detail.ViewMemo"
             android:theme="@style/AppTheme.NoActionBar" />
+        <receiver android:name=".alert.NotificationReceiver">
+        </receiver>
     </application>
 
 </manifest>

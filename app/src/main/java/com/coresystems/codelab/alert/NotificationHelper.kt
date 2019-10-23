@@ -29,41 +29,40 @@ object NotificationHelper {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-
-            val channelId = "${context.packageName}-$name"
+            val appName = context.resources.getString(R.string.app_name)
+            val channelId = "${context.packageName}-$appName"
             val channel = NotificationChannel(channelId, name, importance)
             channel.description = description
             channel.setShowBadge(showBadge)
 
             // Register the channel with the system
             val notificationManager = context.getSystemService(NotificationManager::class.java)
-            notificationManager.createNotificationChannel(channel)
+            notificationManager?.createNotificationChannel(channel)
         }
     }
     /**
      * Creates a notification
      */
 
-    fun createNotification(context: Context, sampleData: String) {
+    fun createNotification(context: Context, title: String, description: String) {
         // create the notification
-        val notificationBuilder = buildNotification(context, sampleData)
+        val notificationBuilder = buildNotification(context, title, description)
         val notificationManager = NotificationManagerCompat.from(context)
         notificationManager.notify(1, notificationBuilder.build())
     }
     /**
      * Builds and returns the NotificationCompat.Builder notification.
      */
-    private fun buildNotification(context: Context, data: String ): NotificationCompat.Builder {
-
-
-        val channelId = "${context.packageName}-${data}"
+    private fun buildNotification(context: Context, title: String, description: String): NotificationCompat.Builder {
+        val appName = context.resources.getString(R.string.app_name)
+        val channelId = "${context.packageName}-${appName}"
 
         return NotificationCompat.Builder(context, channelId).apply {
-            setSmallIcon(R.drawable.ic_launcher_background)
-            setContentTitle(data)
+            setSmallIcon(R.drawable.ic_memo)
+            setContentTitle(title)
             setAutoCancel(true)
-            setLargeIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_launcher_background))
-            setContentText("${data}")
+            setLargeIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_pad))
+            setContentText(description)
             setGroup("group name")
 
             // Launches the app to open the reminder edit screen when tapping the whole notification
