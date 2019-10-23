@@ -6,8 +6,10 @@ import android.content.Intent
 
 class NotificationReceiver : BroadcastReceiver() {
 
-    override fun onReceive(context: Context, intent: Intent) {
+    override fun onReceive(context: Context, intent: Intent?) {
         println("Broadcasr receiver")
-        NotificationHelper.createNotification(context,"sample data")
+        val title = intent!!.getStringExtra("MESSAGE_TITLE")
+        val desc = intent.getStringExtra("MESSAGE_DESCRIPTION")
+        NotificationHelper.createNotification(context, title, desc)
     }
 }

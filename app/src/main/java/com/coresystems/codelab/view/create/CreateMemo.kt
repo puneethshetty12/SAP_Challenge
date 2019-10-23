@@ -122,8 +122,8 @@ class CreateMemo : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClick
             val intent = Intent(applicationContext, NotificationReceiver::class.java)
             intent.putExtra("MESSAGE_TITLE",memo_title.text)
             intent.putExtra("MESSAGE_DESCRIPTION",memo_description.text)
-            var pendingIntent = PendingIntent.getBroadcast(applicationContext,intentId,intent, PendingIntent.FLAG_CANCEL_CURRENT)
-            var locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            val pendingIntent = PendingIntent.getBroadcast(applicationContext,intentId,intent, PendingIntent.FLAG_CANCEL_CURRENT)
+            val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
             locationManager.addProximityAlert(reminderLatitude, reminderLongitude, RADIUS, -1,pendingIntent)
         }
     }
