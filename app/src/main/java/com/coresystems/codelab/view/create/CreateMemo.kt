@@ -120,8 +120,9 @@ class CreateMemo : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClick
     private fun createProximityAlert(intentId: Int){
         if(checkLocationPermission()){
             val intent = Intent(applicationContext, NotificationReceiver::class.java)
-            intent.putExtra("MESSAGE_TITLE",memo_title.text)
-            intent.putExtra("MESSAGE_DESCRIPTION",memo_description.text)
+            println(memo_title.text.toString()+"-"+memo_description.text.toString())
+            intent.putExtra("MESSAGE_TITLE",memo_title.text.toString())
+            intent.putExtra("MESSAGE_DESCRIPTION",memo_description.text.toString())
             val pendingIntent = PendingIntent.getBroadcast(applicationContext,intentId,intent, PendingIntent.FLAG_CANCEL_CURRENT)
             val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
             locationManager.addProximityAlert(reminderLatitude, reminderLongitude, RADIUS, -1,pendingIntent)
