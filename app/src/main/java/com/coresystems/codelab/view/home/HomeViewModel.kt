@@ -33,6 +33,7 @@ class HomeViewModel : ViewModel() {
         async(CommonPool) {
             //We'll only forward the update if the memo has been checked, since we don't offer to uncheck memos right now
             if (isChecked) {
+                //Disable proximityAlert (DO IT!)
                 Repository.instance.saveMemo(memo.copy(isDone = isChecked))
             }
         }

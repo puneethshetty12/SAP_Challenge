@@ -62,7 +62,9 @@ object NotificationHelper {
             setContentTitle(title)
             setAutoCancel(true)
             setLargeIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_pad))
-            setContentText(description)
+            setContentText("Location nearby")
+            setStyle(NotificationCompat.BigTextStyle()
+                    .bigText(description))
             setGroup("group name")
 
             // Launches the app to open the reminder edit screen when tapping the whole notification
