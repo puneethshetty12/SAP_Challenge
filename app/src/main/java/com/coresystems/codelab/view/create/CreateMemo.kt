@@ -11,6 +11,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import com.coresystems.codelab.R
+import com.coresystems.codelab.alert.ProximityAlert
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -24,7 +25,8 @@ import java.util.*
 /**
  * Activity that allows a user to create a new Memo.
  */
-class CreateMemo : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClickListener {
+class CreateMemo : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMyLocationButtonClickListener{
+
 
     private lateinit var model: CreateMemoViewModel
     private lateinit var mapView: MapView
@@ -86,8 +88,15 @@ class CreateMemo : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClick
         if (map != null) {
             mMap = map
             mMap!!.setOnMapClickListener(this)
-        }
+            if(checkLocationPermission()){
+                mMap.isMyLocationEnabled = true
+                mMap.setOnMyLocationButtonClickListener(this);
 
+            }
+        }
+    }
+    override fun onMyLocationButtonClick(): Boolean {
+        return false
     }
     override fun onMapClick(point: LatLng?) {
         mMap.clear()

@@ -1,7 +1,7 @@
 package com.coresystems.codelab.repository
 
 import android.app.Application
-import com.coresystems.codelab.view.create.ProximityAlert
+import com.coresystems.codelab.alert.ProximityAlert
 
 /**
  * Extension of the Android Application class.

@@ -25,6 +25,7 @@ internal class MemoViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         title.text = memo.title
         text.text = memo.description
         checkbox.isChecked = memo.isDone
+        println("Memo :"+memo.title+", checkbox "+memo.isDone)
         //We only let the user edit the checkbox if the item has not been marked as "done"
         checkbox.isEnabled = !memo.isDone
         checkbox.setOnCheckedChangeListener(onCheckboxChanged)

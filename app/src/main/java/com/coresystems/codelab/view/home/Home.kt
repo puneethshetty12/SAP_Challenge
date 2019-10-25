@@ -20,6 +20,7 @@ import android.view.View
 import android.widget.CompoundButton
 import com.coresystems.codelab.R
 import com.coresystems.codelab.alert.NotificationHelper
+import com.coresystems.codelab.alert.ProximityAlert
 import com.coresystems.codelab.model.Android
 import com.coresystems.codelab.model.Memo
 import com.coresystems.codelab.view.create.CreateMemo
@@ -76,6 +77,9 @@ class Home : AppCompatActivity() {
             //Implementation for when the user marks a memo as completed
             checkbox, isChecked ->
             model.updateMemo(checkbox.tag as Memo, isChecked)
+            if(isChecked){
+                ProximityAlert.instance.removeProximityAlert((checkbox.tag as Memo).intentId)
+            }
         })
         recyclerView.adapter = adapter
         recyclerView.addItemDecoration(DividerItemDecoration(this, (recyclerView.layoutManager as LinearLayoutManager).orientation))
@@ -93,6 +97,7 @@ class Home : AppCompatActivity() {
             viewModel.setMemos(observables, this@Home)
             observables.observe(this@Home, Observer { memoList ->
                 if (memoList != null) adapter.setItems(memoList)
+                println("List of memos :"+memoList.toString())
             })
         }
     }

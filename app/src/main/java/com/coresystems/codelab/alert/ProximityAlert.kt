@@ -1,4 +1,4 @@
-package com.coresystems.codelab.view.create
+package com.coresystems.codelab.alert
 
 import android.annotation.SuppressLint
 import android.app.PendingIntent
@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.location.LocationManager
 import android.widget.Toast
-import com.coresystems.codelab.alert.NotificationReceiver
 import com.coresystems.codelab.model.PROXIMITY_RADIUS
 
 class ProximityAlert {
@@ -16,7 +15,7 @@ class ProximityAlert {
         private lateinit var context: Context
 
         fun saveContext(context: Context){
-            this.context = context
+            Companion.context = context
         }
     }
 
@@ -32,6 +31,7 @@ class ProximityAlert {
     }
 
     fun removeProximityAlert(intentId: Int){
+        println("Intent id "+intentId)
         val intent = Intent(context, NotificationReceiver::class.java)
         val pendingIntent = PendingIntent.getBroadcast(context,intentId,intent, PendingIntent.FLAG_CANCEL_CURRENT)
         val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
