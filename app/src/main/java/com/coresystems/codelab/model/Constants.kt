@@ -6,3 +6,4 @@ package com.coresystems.codelab.model
  * Created by coresystems on 20.09.17.
  */
 const val EMPTY_STRING: String = ""
+const val PROXIMITY_RADIUS: Float = 200f

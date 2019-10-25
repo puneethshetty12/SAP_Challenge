@@ -5,6 +5,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel
 import com.coresystems.codelab.model.Memo
 import com.coresystems.codelab.repository.Repository
+import com.coresystems.codelab.view.create.ProximityAlert
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.async
@@ -33,7 +34,8 @@ class HomeViewModel : ViewModel() {
         async(CommonPool) {
             //We'll only forward the update if the memo has been checked, since we don't offer to uncheck memos right now
             if (isChecked) {
-                //Disable proximityAlert (DO IT!)
+                //Remove proximityAlert
+                ProximityAlert.instance.removeProximityAlert(memo.intentId)
                 Repository.instance.saveMemo(memo.copy(isDone = isChecked))
             }
         }

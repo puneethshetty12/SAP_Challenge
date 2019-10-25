@@ -1,12 +1,8 @@
 package com.coresystems.codelab.view.create
 
 import android.Manifest
-import android.app.PendingIntent
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -15,7 +11,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import com.coresystems.codelab.R
-import com.coresystems.codelab.alert.NotificationReceiver
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -119,13 +114,9 @@ class CreateMemo : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClick
      */
     private fun createProximityAlert(intentId: Int){
         if(checkLocationPermission()){
-            val intent = Intent(applicationContext, NotificationReceiver::class.java)
-            println(memo_title.text.toString()+"-"+memo_description.text.toString())
-            intent.putExtra("MESSAGE_TITLE",memo_title.text.toString())
-            intent.putExtra("MESSAGE_DESCRIPTION",memo_description.text.toString())
-            val pendingIntent = PendingIntent.getBroadcast(applicationContext,intentId,intent, PendingIntent.FLAG_CANCEL_CURRENT)
-            val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-            locationManager.addProximityAlert(reminderLatitude, reminderLongitude, RADIUS, -1,pendingIntent)
+            val title = memo_title.text.toString()
+            val message = memo_description.text.toString()
+            ProximityAlert.instance.createProximityAlert(intentId,title,message, reminderLatitude, reminderLongitude)
         }
     }
     private fun checkLocationPermission(): Boolean{
