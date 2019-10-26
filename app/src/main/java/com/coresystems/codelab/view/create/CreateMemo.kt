@@ -3,6 +3,8 @@ package com.coresystems.codelab.view.create
 import android.Manifest
 import android.arch.lifecycle.ViewModelProviders
 import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -20,6 +22,8 @@ import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.content_create_memo.*
 import java.util.*
+
+
 
 
 /**
@@ -106,7 +110,7 @@ class CreateMemo : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClick
         var markerOptions = MarkerOptions().position(point)
         markerOptions.title("Selected point")
         mMap.addMarker(markerOptions)
-        memo_location.setText("Location added")
+        memo_location.setText(getLocalName(point.latitude, point.longitude))
     }
 
     private fun createMemoId(): Int{
@@ -138,6 +142,26 @@ class CreateMemo : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClick
             result = true
         }
         return result
+    }
+
+    private fun getLocalName(lat: Double, lon: Double): String? {
+        var geocoder = Geocoder(this, Locale.getDefault())
+        try {
+            var location = geocoder.getFromLocation(lat,lon, 1)
+            var obj: Address = location.get(0)
+            var add = obj.getAddressLine(0)
+            add = add + "\n" + obj.countryName
+            add = add + "\n" + obj.countryCode
+            add = add + "\n" + obj.adminArea
+            add = add + "\n" + obj.postalCode
+            add = add + "\n" + obj.subAdminArea
+            add = add + "\n" + obj.locality
+            add = add + "\n" + obj.subThoroughfare
+            return add
+        } catch (e: Exception){
+            println("Error getting location name -"+e)
+            return null
+        }
     }
     override fun onResume() {
         super.onResume()
