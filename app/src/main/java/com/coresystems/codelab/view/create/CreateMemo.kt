@@ -3,8 +3,6 @@ package com.coresystems.codelab.view.create
 import android.Manifest
 import android.arch.lifecycle.ViewModelProviders
 import android.content.pm.PackageManager
-import android.location.Address
-import android.location.Geocoder
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -13,6 +11,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import com.coresystems.codelab.R
+import com.coresystems.codelab.alert.LocationUtil
 import com.coresystems.codelab.alert.ProximityAlert
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
@@ -110,7 +109,7 @@ class CreateMemo : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClick
         var markerOptions = MarkerOptions().position(point)
         markerOptions.title("Selected point")
         mMap.addMarker(markerOptions)
-        memo_location.setText(getLocalName(point.latitude, point.longitude))
+        memo_location.setText(LocationUtil.getLocalName(this, point.latitude, point.longitude))
     }
 
     private fun createMemoId(): Int{
@@ -144,25 +143,6 @@ class CreateMemo : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClick
         return result
     }
 
-    private fun getLocalName(lat: Double, lon: Double): String? {
-        var geocoder = Geocoder(this, Locale.getDefault())
-        try {
-            var location = geocoder.getFromLocation(lat,lon, 1)
-            var obj: Address = location.get(0)
-            var add = obj.getAddressLine(0)
-            add = add + "\n" + obj.countryName
-            add = add + "\n" + obj.countryCode
-            add = add + "\n" + obj.adminArea
-            add = add + "\n" + obj.postalCode
-            add = add + "\n" + obj.subAdminArea
-            add = add + "\n" + obj.locality
-            add = add + "\n" + obj.subThoroughfare
-            return add
-        } catch (e: Exception){
-            println("Error getting location name -"+e)
-            return null
-        }
-    }
     override fun onResume() {
         super.onResume()
         mapView.onResume()

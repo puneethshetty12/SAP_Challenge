@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.coresystems.codelab.R
+import com.coresystems.codelab.alert.LocationUtil
 import com.coresystems.codelab.model.Android
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
@@ -46,6 +47,7 @@ class ViewMemo : AppCompatActivity(), OnMapReadyCallback {
                 memo_description.setText(memo.description)
                 reminderLongitude = memo.reminderLongitude
                 reminderLatitude = memo.reminderLatitude
+                memo_location.setText(LocationUtil.getLocalName(this@ViewMemo, reminderLatitude, reminderLongitude))
                 memo_title.isEnabled = false
                 memo_description.isEnabled = false
                 createMarker()
