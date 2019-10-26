@@ -5,10 +5,10 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.os.Build
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationManagerCompat
+import android.support.v4.content.ContextCompat
 import com.coresystems.codelab.R
 import com.coresystems.codelab.view.home.Home
 
@@ -61,8 +61,7 @@ object NotificationHelper {
             setSmallIcon(R.drawable.ic_memo)
             setContentTitle(title)
             setAutoCancel(true)
-            setLargeIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_pad))
-            setContentText("Location nearby")
+            color = ContextCompat.getColor(context, R.color.colorPrimary)
             setStyle(NotificationCompat.BigTextStyle()
                     .bigText(description))
             setGroup("group name")
