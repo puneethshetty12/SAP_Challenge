@@ -60,6 +60,7 @@ object NotificationHelper {
         return NotificationCompat.Builder(context, channelId).apply {
             setSmallIcon(R.drawable.ic_memo)
             setContentTitle(title)
+            setContentText(description)
             setAutoCancel(true)
             color = ContextCompat.getColor(context, R.color.colorPrimary)
             setStyle(NotificationCompat.BigTextStyle()

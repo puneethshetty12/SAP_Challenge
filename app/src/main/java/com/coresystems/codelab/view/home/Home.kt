@@ -97,7 +97,6 @@ class Home : AppCompatActivity() {
             viewModel.setMemos(observables, this@Home)
             observables.observe(this@Home, Observer { memoList ->
                 if (memoList != null) adapter.setItems(memoList)
-                println("List of memos :"+memoList.toString())
             })
         }
     }
